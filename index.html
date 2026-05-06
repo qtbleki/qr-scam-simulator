@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Digital Reward Simulation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<style>
+body {
+  font-family: Arial;
+  margin:0;
+  background:#eef2f7;
+}
+
+.box {
+  max-width:420px;
+  margin:40px auto;
+  background:white;
+  padding:24px;
+  border-radius:16px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+  text-align:center;
+}
+
+button {
+  width:100%;
+  padding:14px;
+  margin-top:12px;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
+  background:#2563eb;
+  color:white;
+}
+
+input {
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+.small {
+  font-size:12px;
+  color:#666;
+}
+
+/* STEP 1 (blue fintech style) */
+#step1 {
+  background:linear-gradient(135deg,#1e3a8a,#2563eb);
+  color:white;
+}
+
+/* progress bar */
+.bar-bg {
+  width:100%;
+  height:10px;
+  background:#e5e7eb;
+  border-radius:10px;
+  margin-top:20px;
+}
+
+.bar {
+  width:0%;
+  height:10px;
+  background:#fbbf24;
+  border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- STEP 1 -->
+<div class="box" id="step1">
+  <h2>Digital Wallet Rewards</h2>
+  <h3>🎁 RM300 Cashback Bonus</h3>
+
+  <p>Limited-time reward eligibility program</p>
+
+  <button onclick="nextStep()">Check Eligibility</button>
+
+  <p class="small">Secure system verification required</p>
+</div>
+
+<!-- STEP 1.5 LOADING -->
+<div class="box" id="check" style="display:none;">
+  <h3>Checking Eligibility...</h3>
+
+  <p id="statusText">Verifying your profile with reward system</p>
+
+  <div class="bar-bg">
+    <div class="bar" id="bar"></div>
+  </div>
+
+  <p class="small">Please do not close this page</p>
+</div>
+
+<!-- STEP 2 -->
+<div class="box" id="step2" style="display:none;">
+  <h3>Verify Details</h3>
+
+  <input id="name" placeholder="Full Name" type="text"/>
+  <input id="phone" placeholder="Mobile Number" type="tel"/>
+
+  <button onclick="submitForm()">Continue</button>
+
+  <p class="small">Verification required to proceed</p>
+</div>
+
+<!-- STEP 3 -->
+<div class="box" id="step3" style="display:none;">
+  <h2>⚠️ Simulation Complete</h2>
+
+  <p>You have interacted with a cyber scam simulation.</p>
+
+  <h3>Red Flags Identified:</h3>
+  <ul style="text-align:left;">
+    <li>Unrealistic cash reward offer</li>
+    <li>Urgency + system processing delay</li>
+    <li>Request for personal details</li>
+    <li>No verified official source</li>
+  </ul>
+
+  <h3>Safety Guidance:</h3>
+  <ul style="text-align:left;">
+    <li>Do not trust unknown QR links</li>
+    <li>Verify official apps only</li>
+    <li>Avoid submitting personal data blindly</li>
+  </ul>
+
+  <p class="small">Cyber Awareness Training Module</p>
+
+  <button onclick="restart()">Restart</button>
+</div>
+
+<script>
+
+/* tracking */
+function track(event) {
+  let data = JSON.parse(localStorage.getItem("track") || "{}");
+  data[event] = (data[event] || 0) + 1;
+  localStorage.setItem("track", JSON.stringify(data));
+}
+
+/* STEP 1 → loading simulation */
+function nextStep() {
+  document.getElementById("step1").style.display = "none";
+  document.getElementById("check").style.display = "block";
+
+  track("click_claim");
+
+  let progress = 0;
+  let bar = document.getElementById("bar");
+
+  let interval = setInterval(() => {
+    progress += 10;
+    bar.style.width = progress + "%";
+
+    if(progress === 30){
+      document.getElementById("statusText").innerText = "Analyzing eligibility profile...";
+    }
+
+    if(progress === 60){
+      document.getElementById("statusText").innerText = "Cross-checking reward database...";
+    }
+
+    if(progress === 90){
+      document.getElementById("statusText").innerText = "Finalizing approval status...";
+    }
+
+    if(progress >= 100){
+      clearInterval(interval);
+
+      setTimeout(() => {
+        document.getElementById("check").style.display = "none";
+        document.getElementById("step2").style.display = "block";
+      }, 500);
+    }
+
+  }, 200);
+}
+
+/* STEP 2 → submit */
+function submitForm() {
+  let name = document.getElementById("name").value;
+  let phone = document.getElementById("phone").value;
+
+  if(name && phone){
+    document.getElementById("step2").style.display = "none";
+    document.getElementById("step3").style.display = "block";
+
+    track("submit_form");
+    track("completed");
+  } else {
+    alert("Please fill in all fields");
+  }
+}
+
+/* restart */
+function restart() {
+  document.getElementById("step3").style.display = "none";
+  document.getElementById("step1").style.display = "block";
+}
+
+/* initial view tracking */
+track("view");
+
+</script>
+
+</body>
+</html>
